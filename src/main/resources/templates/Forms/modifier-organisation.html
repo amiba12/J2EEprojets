@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier Organisation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        h1 {
+            color: #0d6efd; /* Bleu Bootstrap */
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow w-100" style="max-width: 600px;">
+        <h1 class="text-center mb-4">Modifier une Organisation</h1>
+
+        <form th:action="@{'/organisations/' + ${organisation.id} + '/modif-logo'}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom :</label>
+                <input type="text" class="form-control" id="nom" name="nom" th:value="${organisation.nom}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="adresseLegale" class="form-label">Adresse légale :</label>
+                <input type="text" class="form-control" id="adresseLegale" name="adresseLegale" th:value="${organisation.adresseLegale}">
+            </div>
+
+            <div class="mb-3">
+                <label for="numeroFiscal" class="form-label">Numéro fiscal :</label>
+                <input type="text" class="form-control" id="numeroFiscal" name="numeroFiscal" th:value="${organisation.numeroFiscal}">
+            </div>
+
+            <div class="mb-3">
+                <label for="contact" class="form-label">Contact :</label>
+                <input type="text" class="form-control" id="contact" name="contact" th:value="${organisation.contact}">
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="valide" name="valide" th:checked="${organisation.valide} ? 'checked' : null">
+                <label class="form-check-label" for="valide">Validé</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="logoFile" class="form-label">Nouveau Logo :</label>
+                <input type="file" class="form-control" id="logoFile" name="logoFile">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Modifier l'organisation</button>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

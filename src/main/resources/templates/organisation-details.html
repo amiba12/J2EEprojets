@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'Organisation</title>
+    <link rel="stylesheet" th:href="@{/organisation-details.css}">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <ul>
+            <li><a th:href="@{/}">Accueil</a></li>
+            <li><a th:href="@{/organisations}">Organisations</a></li>
+            <li><a th:href="@{/actions}">Actions de charité</a></li>
+            <li><a th:href="@{/don}">Effectuer Don</a></li>
+            <li><a th:href="@{/login}">Connexion</a></li>
+            <li><a th:href="@{/register}">Inscription</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h1 th:text="${organisation.nom}">Nom de l'organisation</h1>
+    <div style="margin-bottom: 20px;">
+        <img th:src="@{${organisation.logo}}" alt="Logo" style="max-width: 150px;">
+    </div>
+
+    <!-- Tableau des infos de l'organisation -->
+    <table class="info-table">
+        <tr>
+            <th>Nom</th>
+            <td th:text="${organisation.nom}">Nom</td>
+        </tr>
+        <tr>
+            <th>Adresse</th>
+            <td th:text="${organisation.adresseLegale}">Adresse</td>
+        </tr>
+        <tr>
+            <th>Téléphone</th>
+            <td th:text="${organisation.contact}">Téléphone</td>
+        </tr>
+        <tr>
+            <th>Date de création</th>
+            <td th:text="${organisation.dateCreation}">Téléphone</td>
+        </tr>
+
+        <tr>
+            <th>Numéro Fiscal</th>
+            <td th:text="${organisation.numeroFiscal}">Numéro Fiscal</td>
+        </tr>
+        <tr>
+            <th>Validation</th>
+            <td th:text="${organisation.valide} ? 'Validée ✅' : 'Non validée ❌'">Validation</td>
+        </tr>
+    </table>
+
+    <!-- Tableau des actions associées -->
+    <section>
+        <h2>Actions de charité associées</h2>
+        <table class="actions-table">
+            <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Lieu</th>
+                <th>Détails</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="action : ${actions}">
+                <td th:text="${action.titre}">Titre action</td>
+                <td th:text="${action.description}">Description</td>
+                <td th:text="${#dates.format(action.date, 'dd/MM/yyyy')}">Date</td>
+                <td th:text="${action.lieu}">Lieu</td>
+                <td><a th:href="@{'/actions/actionDeCharite/' + ${action.id}}">Voir détails</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 CharityWebApp. Tous droits réservés.</p>
+</footer>
+</body>
+</html>
