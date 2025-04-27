@@ -1,8 +1,10 @@
 package Bah.emsi.charitywebapp.Services;
 
+import Bah.emsi.charitywebapp.entities.ActionDeCharite;
 import Bah.emsi.charitywebapp.entities.Don;
 import Bah.emsi.charitywebapp.entities.Paiement;
 import Bah.emsi.charitywebapp.entities.Utilisateur;
+import Bah.emsi.charitywebapp.repositories.ActionDeChariteRepo;
 import Bah.emsi.charitywebapp.repositories.DonRepo;
 import Bah.emsi.charitywebapp.repositories.PaiementRepo;
 import Bah.emsi.charitywebapp.repositories.UtilisateurRepo;
@@ -25,6 +27,8 @@ public class DonService {
 
     @Autowired
     private PaiementRepo paiementRepo;
+    @Autowired
+    private ActionDeChariteRepo actionDeChariteRepo;
 
     // Enregistrer un don
     public Don enregistrerDon(Don don) {
@@ -45,12 +49,18 @@ public class DonService {
         Utilisateur utilisateur = utilisateurRepo.findById(utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
+        // Trouver l'action de charité
+        ActionDeCharite actionDeCharite = actionDeChariteRepo.findById(actionDeChariteId)
+                .orElseThrow(() -> new RuntimeException("Action de charité non trouvée"));
 
         // Créer le don et l'associer à l'utilisateur
         Don don = new Don();
         don.setUtilisateur(utilisateur);
         don.setMontant(montant);
         don.setDate(new Date());  // Date du don
+
+        // Associer l'action de charité au don
+        don.setActionDeCharite(actionDeCharite);
 
         // Créer et associer un paiement au don
         Paiement paiement = new Paiement();
@@ -68,11 +78,20 @@ public class DonService {
         utilisateur.getHistoriqueDons().add(donEnregistre);
         utilisateurRepo.save(utilisateur);
 
-        return donEnregistre;
+        // Ajouter l'utilisateur aux participants de l'action de charité
+        if (!utilisateur.getActions().contains(actionDeCharite)) {
+            utilisateur.getActions().add(actionDeCharite);
+            utilisateurRepo.save(utilisateur);
+        }
 
-        // Enregistrer le don dans la base de données
+        return donEnregistre;
+    // Enregistrer le don dans la base de données
             //return donRepo.save(don);
     }
+    public List<Don> getDonsByUtilisateurId(Long utilisateurId) {
+        return donRepo.findByUtilisateurId(utilisateurId);
+    }
+
 
 }
 

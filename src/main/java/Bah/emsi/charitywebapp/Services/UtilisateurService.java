@@ -1,6 +1,7 @@
 package Bah.emsi.charitywebapp.Services;
 
 import Bah.emsi.charitywebapp.entities.ActionDeCharite;
+import Bah.emsi.charitywebapp.entities.Administrateur;
 import Bah.emsi.charitywebapp.entities.Utilisateur;
 import Bah.emsi.charitywebapp.repositories.ActionDeChariteRepo;
 import Bah.emsi.charitywebapp.repositories.UtilisateurRepo;
@@ -24,12 +25,15 @@ public class UtilisateurService {
     private PasswordEncoder passwordEncoder; // Injection du bean PasswordEncoder (pas besoin de BCryptPasswordEncoder)
 
 
-    //public Utilisateur saveUtilisateur(Utilisateur utilisateur) {
-      //  return utilisateurRepo.save(utilisateur);
-    //}
+    public Utilisateur saveUtilisateur(Utilisateur utilisateur) {
+        return utilisateurRepo.save(utilisateur);
+    }
 
     public Utilisateur getUtilisateurById(Long id) {
         return utilisateurRepo.findById(id).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+    }
+    public Utilisateur findByEmail(String email) {
+        return utilisateurRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("mail non trouvé"));
     }
 
     public Iterable<Utilisateur> getAllUtilisateurs() {
@@ -71,15 +75,32 @@ public class UtilisateurService {
     }
 
 
-
-
-    public Utilisateur sInscrire(Utilisateur utilisateur) {
-        if (utilisateurRepo.findByEmail(utilisateur.getEmail()).isPresent()) {
-            throw new RuntimeException("Email déjà utilisé !");
+    public void sInscrire(Utilisateur utilisateur) {
+        // Vérifier s'il existe déjà un administrateur
+        if (utilisateurRepo.findByRole("Administrateur").isEmpty()) {
+            // Si aucun administrateur n'existe, l'utilisateur sera un administrateur par défaut
+            if (utilisateur instanceof Administrateur) {
+                // Si l'utilisateur est de type Administrateur, lui attribuer le rôle ADMIN
+                ((Administrateur) utilisateur).setRole("Aministrateur");
+            }
+        } else {
+            // Sinon, l'utilisateur devient un simple utilisateur
+            if (utilisateur instanceof Administrateur) {
+                // Si c'est un administrateur, l'attribuer en rôle USER par défaut
+                ((Administrateur) utilisateur).setRole("Utilisateur");
+            }
         }
+        // Hash du mot de passe avant de l'enregistrer
         utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-        return utilisateurRepo.save(utilisateur);
+        // Vérifier si l'email est déjà utilisé
+        if (utilisateurRepo.existsByEmail(utilisateur.getEmail())) {
+            throw new RuntimeException("Email déjà utilisé");
+        }
+        // Enregistrement de l'utilisateur dans la base de données
+        utilisateurRepo.save(utilisateur);
     }
+
+
 
     public Utilisateur seConnecter(String email, String motDePasse) {
         Utilisateur utilisateur = utilisateurRepo.findByEmail(email)
@@ -104,5 +125,6 @@ public class UtilisateurService {
         }
         return false;  // L'utilisateur n'a pas été trouvé
     }
+
 
 }

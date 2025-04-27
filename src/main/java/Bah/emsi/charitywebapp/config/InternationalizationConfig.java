@@ -39,6 +39,9 @@ public class InternationalizationConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang"); // L'URL utilisera ?lang=fr ou ?lang=en
+        registry.addInterceptor(lci);
     }
 }
+

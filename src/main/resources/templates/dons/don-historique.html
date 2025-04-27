@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des Dons</title>
+</head>
+<body>
+<h1>Historique des Dons</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Montant</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="don : ${dons}">
+        <td th:text="${don.id}"></td>
+        <td th:text="${don.montant} + ' DH'"></td>
+        <td th:text="${#dates.format(don.date, 'dd/MM/yyyy')}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -17,7 +17,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "utilisateurs")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)  // Utilisation de l'héritage joint pour la base de données
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +34,11 @@ public class Utilisateur {
     private String email;
     private String motDePasse;
     private boolean active;
+    private String role= "Utilisateur";
+
+    {
+        this.setRole("Utilisateur");
+    }
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -47,14 +54,6 @@ public class Utilisateur {
     private List<ActionDeCharite> actions = new ArrayList<>();
 
 
-
-    // Méthodes métiers (facultatives ici)
-    public void sInscrire(String motDePasse) {
-        this.motDePasse = new BCryptPasswordEncoder().encode(motDePasse);
-    }
-
-    public void seConnecter() {}
-    public void modifierProfil() {}
 }
 
 

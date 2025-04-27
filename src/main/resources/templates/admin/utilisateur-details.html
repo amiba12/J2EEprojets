@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de l'utilisateur</title>
+    <!-- Lien CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Détails de l'utilisateur</h2>
+
+    <div class="card p-4">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th>Nom</th>
+                <td th:text="${utilisateur.nom}"></td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td th:text="${utilisateur.prenom}"></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td th:text="${utilisateur.email}"></td>
+            </tr>
+            <tr>
+                <th>Mot de passe</th>
+                <td th:text="${utilisateur.motDePasse}"></td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td th:text="${utilisateur.active ? 'Actif' : 'Inactif'}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h4 class="mt-4">Historique des dons</h4>
+
+        <div th:if="${#lists.isEmpty(utilisateur.historiqueDons)}">
+            <p class="text-muted">Aucun don effectué.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(utilisateur.historiqueDons)}">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Montant (DH)</th>
+                    <th>Date du Don</th> <!-- Adapte selon ton objet Don -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="don : ${utilisateur.historiqueDons}">
+                    <td th:text="${don.montant}"></td>
+                    <td th:text="${don.date}"></td> <!-- Change "dateDon" si différent -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/utilisateurs/list-afficher" class="btn btn-secondary mt-3">Retour à la liste</a>
+    </div>
+</div>
+
+<!-- Lien JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

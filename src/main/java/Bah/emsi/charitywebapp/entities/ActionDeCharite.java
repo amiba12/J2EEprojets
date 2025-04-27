@@ -47,7 +47,7 @@ public class ActionDeCharite {
     //)
 
     @ManyToMany(mappedBy = "actions")
-    @JsonManagedReference
+    //@JsonManagedReference
     private List<Utilisateur> participants = new ArrayList<>();
 
 

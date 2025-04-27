@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Don Effectué</title>
+</head>
+<body>
+<h1>Don effectué avec succès !</h1>
+
+<p>Merci pour votre don de <span th:text="${don.montant}"></span> DH à l'action de charité : <span th:text="${don.actionDeCharite.titre}"></span>.</p>
+
+<a th:href="@{/dons/historique(utilisateurId=${don.utilisateur.id})}">Voir mes dons</a>
+
+</body>
+</html>

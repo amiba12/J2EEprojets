@@ -23,12 +23,12 @@ public class Don {
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
-    @JsonBackReference
+   // @JsonBackReference
     private Utilisateur utilisateur;
 
     @ManyToOne
     @JoinColumn(name = "action_de_charite_id")
-    @JsonIgnoreProperties({"participants", "organisation", "medias"})
+    //@JsonIgnoreProperties({"participants", "organisation", "medias"})
     private ActionDeCharite actionDeCharite;
 
     @OneToOne
@@ -36,7 +36,5 @@ public class Don {
     private Paiement paiement;
 
 
-    public void effectuerDon() {
-        // Logique d'effectuation du don ici
-    }
+
 }
